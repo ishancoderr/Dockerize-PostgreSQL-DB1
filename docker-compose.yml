@@ -1,18 +1,21 @@
-version: "3.8"
-
+# Agent-1's database on its own (for development or a quick look):
+#   copy .env.example .env      (set POSTGRES_PASSWORD)
+#   docker compose up -d
+# then connect to localhost:5434, database agent_1_db, user postgres.
+# In the full deployment, kqml-deploy builds this repository as service db1
+# instead, with no open port.
 services:
   db:
-    image: postgis/postgis
+    build: .
+    image: kqml-db1
     container_name: agent-1-postgres-db
-    env_file:
-      - .env
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
     ports:
-      - "5434:5432"
+      - "${DB_PORT:-5434}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./init:/docker-entrypoint-initdb.d
-
+      - pgdata:/var/lib/postgresql
 
 volumes:
   pgdata:
-

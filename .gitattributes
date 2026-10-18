@@ -1,0 +1,4 @@
+# Loaded by Postgres inside a Linux container: keep LF line endings.
+*.sql text eol=lf
+*.yml text eol=lf
+Dockerfile text eol=lf
